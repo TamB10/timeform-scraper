@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '0 5 * * *'  # runs daily at 5am UTC
 
+    permissions:
+  contents: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
