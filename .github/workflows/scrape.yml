@@ -1,9 +1,9 @@
 name: Daily Timeform Scraper
 
 on:
-  workflow_dispatch:  # allows manual "Run workflow" button
+  workflow_dispatch:
   schedule:
-    - cron: '0 5 * * *'  # runs daily at 5am UTC
+    - cron: '0 5 * * *'
 
 permissions:
   contents: write
@@ -24,13 +24,17 @@ jobs:
       - name: Install dependencies
         run: pip install requests beautifulsoup4
 
-      - name: Run scraper
-        run: python scrape_timeform.py
+      - name: Download today_urls.txt
+        run: |
+          curl -O https://raw.githubusercontent.com/TamB10/timeform-scraper/main/today_urls.txt
 
-      - name: Commit and push results
+      - name: Run runner scraper
+        run: python github_scrape_runners.py
+
+      - name: Commit runners.json
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add today_urls.txt
-          git commit -m "Daily scrape $(date -u +'%Y-%m-%d')" || echo "No changes to commit"
+          git add runners.json
+          git commit -m "Scraped runners.json for $(date -u +'%Y-%m-%d')" || echo "No changes"
           git push
