@@ -31,6 +31,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add today.json
+          git add today_urls.txt
           git commit -m "Daily scrape $(date -u +'%Y-%m-%d')" || echo "No changes to commit"
           git push
