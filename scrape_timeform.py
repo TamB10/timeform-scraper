@@ -5,11 +5,15 @@ from datetime import date
 
 BASE_URL = "https://www.timeform.com/horse-racing/racecards"
 TODAY = date.today().strftime("%Y-%m-%d")
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+}
+
 RACE_URLS = []
 
 def get_race_urls():
     url = f"{BASE_URL}/{TODAY}"
-    resp = requests.get(url)
+    resp = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(resp.text, "html.parser")
     links = soup.select(".racecard-list__item a")
     for link in links:
@@ -20,7 +24,7 @@ def get_race_urls():
     return list(set(RACE_URLS))
 
 def scrape_race(url):
-    resp = requests.get(url)
+    resp = requests.get(url, headers=HEADERS)
     soup = BeautifulSoup(resp.text, "html.parser")
     header = {
         "track": soup.select_one(".card-header__location").text.strip() if soup.select_one(".card-header__location") else "",
